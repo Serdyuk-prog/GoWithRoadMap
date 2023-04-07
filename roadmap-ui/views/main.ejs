@@ -1,0 +1,11 @@
+<% layout('./boilerplate') %>
+
+<h1>Your Roadmaps:</h1>
+
+<div class="list-group col-3 mt-4">
+    <% for (let map of maps) {%>
+    <a href="" class="list-group-item list-group-item-action">
+        <%= map.title %></a
+    >
+    <% } %>
+</div>
