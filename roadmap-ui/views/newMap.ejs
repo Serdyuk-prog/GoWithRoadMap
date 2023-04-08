@@ -1,0 +1,13 @@
+<% layout('./boilerplate') %>
+
+<h1>New Map</h1>
+
+<form class="col-4" action="/map" method="POST">
+    <div class="form-group">
+        <label for="title"><h2>Title of your plan</h2></label>
+        <input type="text" id="title" name="map[title]" class="form-control mb-3" placeholder="title" required />
+        <label for="description"><h2>Description</h2></label>
+        <input type="text" id="description" name="map[description]" class="form-control mb-3" placeholder="description" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

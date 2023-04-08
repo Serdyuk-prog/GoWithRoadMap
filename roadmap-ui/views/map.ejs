@@ -1,0 +1,17 @@
+<% layout('./boilerplate') %>
+
+<h1><%= map.title %></h1>
+<a href="/edit/<%= map.id %>" class="btn btn-danger">Edit</a>
+
+<p class="text-start mt-2"><%= map.description %></p>
+
+<ul>
+    <% for (let el of map.root) {%>
+    <li>
+        <%= el.title %>: <%= el.description %>
+        <% for (let sub of el.children) {%>
+            
+        <% } %>
+    </li>
+    <% } %>
+</ul>

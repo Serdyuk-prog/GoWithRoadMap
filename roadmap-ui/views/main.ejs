@@ -4,7 +4,7 @@
 
 <div class="list-group col-3 mt-4">
     <% for (let map of maps) {%>
-    <a href="" class="list-group-item list-group-item-action">
+    <a href="/<%= map.id %>" class="list-group-item list-group-item-action">
         <%= map.title %></a
     >
     <% } %>
