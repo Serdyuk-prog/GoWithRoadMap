@@ -3,6 +3,8 @@ package com.example.history.controllers;
 import com.example.history.dto.error.Error;
 import com.example.history.model.History;
 import com.example.history.services.HistoryService;
+import com.example.history.rabbitmq.RabbitMQSender;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,8 @@ public class HistoryController {
 
     // History service instance
     private final HistoryService historyService;
+    @Autowired
+    private RabbitMQSender rabbitMQSender;
 
     public HistoryController(HistoryService historyService) {
         this.historyService = historyService;
@@ -28,6 +32,10 @@ public class HistoryController {
         try {
             // Call the history service method
             History history = historyService.getUserHistory(briefly);
+
+//            history.getWaypoints().forEach(w -> {
+//                rabbitMQSender.sendWayPoint(w);
+//            });
 
             // Return the history object with status code 200
             return new ResponseEntity<>(history, HttpStatus.OK);
