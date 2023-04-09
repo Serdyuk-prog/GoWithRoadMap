@@ -11,6 +11,7 @@ servers:
 paths:
   /roadmaps:
     get:
+      operationId: SearchRoadmaps
       summary: Search for roadmaps
       tags:
         - RoadMap
@@ -33,6 +34,7 @@ paths:
                     items:
                       $ref: "#/components/schemas/RoadMap"
     post:
+      operationId: CreateNewRoadMap
       summary: Create a new roadmap
       tags:
         - RoadMap
@@ -50,6 +52,7 @@ paths:
                 $ref: "#/components/schemas/RoadMap"
   /roadmaps/{id}:
     get:
+      operationId: GetRoadMapByID
       summary: Get a roadmap
       tags:
         - RoadMap
@@ -74,6 +77,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
     patch:
+      operationId: UpdateRoadMap
       summary: Modify existing roadmap
       tags:
         - RoadMap
@@ -98,7 +102,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
 components:
   schemas:
     CreateRoadMapRequest:
@@ -116,10 +119,13 @@ components:
           type: string
         description:
           type: string
-        root:
+        content:
           nullable: true
           allOf:
-            - $ref: "#/components/schemas/Node"
+            - type: array
+              description: Содержит упорядоченный список пунктов карты.
+              items:
+                $ref: "#/components/schemas/Item"
     CopyRoadMapRequest:
       properties:
         to_user_id:
@@ -139,25 +145,20 @@ components:
         description:
           nullable: true
           type: string
-        root:
+        content:
           type: array
+          description: Содержит упорядоченный список пунктов карты.
           items:
-            $ref: "#/components/schemas/Node"
-    Node:
+            $ref: "#/components/schemas/Item"
+    Item:
       required:
         - id
-        - parent_id
         - title
         - description
         - kind
         - status
-        - children
       properties:
         id:
-          type: string
-          format: uuid
-        parent_id:
-          nullable: true
           type: string
           format: uuid
         title:
@@ -165,25 +166,15 @@ components:
         description:
           type: string
         kind:
-          $ref: "#/components/schemas/NodeKind"
+          $ref: "#/components/schemas/ItemKind"
         status:
-          $ref: "#/components/schemas/NodeStatus"
-        children:
-          $ref: "#/components/schemas/Node"
-      example:
-        id: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-        parent_id: null
-        title: "Entry level"
-        description: "Do some easy steps"
-        kind: required
-        status: proposed
-        children: []
-    NodeKind:
+          $ref: "#/components/schemas/ItemStatus"
+    ItemKind:
       type: string
       enum:
         - optional
         - required
-    NodeStatus:
+    ItemStatus:
       type: string
       enum:
         - proposed
