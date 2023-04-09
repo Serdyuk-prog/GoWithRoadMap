@@ -6,12 +6,25 @@
 <p class="text-start mt-2"><%= map.description %></p>
 
 <ul>
-    <% for (let el of map.root) {%>
+    <% map.root.forEach(function(obj) { %>
     <li>
-        <%= el.title %>: <%= el.description %>
-        <% for (let sub of el.children) {%>
-            
-        <% } %>
+        <h2><%= obj.title %></h2>
+        <p><%= obj.description %></p>
+        <% if (obj.children.length > 0) { %> <% recursiveFunction(obj.children);
+        %> <% } %>
     </li>
-    <% } %>
+    <% }); %>
 </ul>
+
+<% function recursiveFunction(children) { %>
+<ul>
+    <% children.forEach(function(child) { %>
+    <li>
+        <h3><%= child.title %></h3>
+        <p><%= child.description %></p>
+        <% if (child.children.length > 0) { %> <%
+        recursiveFunction(child.children); %> <% } %>
+    </li>
+    <% }); %>
+</ul>
+<% } %>
