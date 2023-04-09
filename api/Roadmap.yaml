@@ -1,0 +1,197 @@
+openapi: 3.0.1
+info:
+  title: RoadMap service
+  description: Service for roadmaps
+  version: 0.1.0
+servers:
+  - url: http://{hostname}/api/v1
+    variables:
+      hostname:
+        default: localhost
+paths:
+  /roadmaps:
+    get:
+      summary: Search for roadmaps
+      tags:
+        - RoadMap
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/RoadMap"
+    post:
+      summary: Create a new roadmap
+      tags:
+        - RoadMap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRoadMapRequest"
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoadMap"
+  /roadmaps/{id}:
+    get:
+      summary: Get a roadmap
+      tags:
+        - RoadMap
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoadMap"
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      summary: Modify existing roadmap
+      tags:
+        - RoadMap
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModifyRoadMapRequest"
+      responses:
+        204:
+          description: Modified
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    CreateRoadMapRequest:
+      required:
+        - title
+      properties:
+        title:
+          type: string
+        description:
+          nullable: true
+          type: string
+    ModifyRoadMapRequest:
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        root:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/Node"
+    CopyRoadMapRequest:
+      properties:
+        to_user_id:
+          type: string
+          format: uuid
+    RoadMap:
+      required:
+        - id
+        - title
+        - root
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          nullable: true
+          type: string
+        root:
+          type: array
+          items:
+            $ref: "#/components/schemas/Node"
+    Node:
+      required:
+        - id
+        - parent_id
+        - title
+        - description
+        - kind
+        - status
+        - children
+      properties:
+        id:
+          type: string
+          format: uuid
+        parent_id:
+          nullable: true
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        kind:
+          $ref: "#/components/schemas/NodeKind"
+        status:
+          $ref: "#/components/schemas/NodeStatus"
+        children:
+          $ref: "#/components/schemas/Node"
+      example:
+        id: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        parent_id: null
+        title: "Entry level"
+        description: "Do some easy steps"
+        kind: required
+        status: proposed
+        children: []
+    NodeKind:
+      type: string
+      enum:
+        - optional
+        - required
+    NodeStatus:
+      type: string
+      enum:
+        - proposed
+        - completed
+        - skipped
+    Error:
+      required:
+        - message
+      properties:
+        message:
+          type: string
