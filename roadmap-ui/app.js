@@ -21,6 +21,10 @@ app.get("/new", (req, res) => {
     res.render("newMap");
 });
 
+app.get("/history", (req, res) => {
+    res.render("history", { waypoints });
+});
+
 app.get("/edit/:id", (req, res) => {
     // get map by id
     let map = {};
@@ -51,7 +55,7 @@ app.post("/map", (req, res) => {
 
 app.post("/map/:id", (req, res) => {
     console.log(req.body);
-    // send edit map request
+    // res.send(req.body);
     res.redirect("/" + req.params.id);
 });
 
@@ -61,83 +65,51 @@ app.listen(3000, () => {
 
 const maps = [
     {
-        id: "1",
-        title: "Name1",
-        author_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        id: "1fa85f64-5717-4562-b3fc-2c963f66afa6",
+        title: "Map1",
         description: "string",
-        root: [
+        content: [
             {
-                id: "1",
-                parent_id: null,
-                title: "Entry level",
-                description: "Do some easy steps",
-                kind: "required",
+                id: "2fa85f64-5717-4562-b3fc-2c963f66afa6",
+                title: "step1",
+                description: "string",
+                kind: "optional",
                 status: "proposed",
-                children: [
-                    {
-                        id: "11",
-                        parent_id: null,
-                        title: "Entry level",
-                        description: "Do some easy steps",
-                        kind: "required",
-                        status: "proposed",
-                        children: [
-                            {
-                                id: "111",
-                                parent_id: null,
-                                title: "Entry level",
-                                description: "Do some easy steps",
-                                kind: "required",
-                                status: "proposed",
-                                children: [],
-                            },
-                        ],
-                    },
-                    {
-                        id: "12",
-                        parent_id: null,
-                        title: "Entry level",
-                        description: "Do some easy steps",
-                        kind: "required",
-                        status: "proposed",
-                        children: [],
-                    },
-                ],
+            },
+            {
+                id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                title: "step1",
+                description: "string",
+                kind: "optional",
+                status: "proposed",
             },
         ],
     },
     {
-        id: "2",
-        title: "Name2",
-        author_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        id: "4fa85f64-5717-4562-b3fc-2c963f66afa6",
+        title: "Map2",
         description: "string",
-        root: [
+        content: [
             {
-                id: "1",
-                parent_id: null,
-                title: "Entry level",
-                description: "Do some easy steps",
-                kind: "required",
+                id: "5fa85f64-5717-4562-b3fc-2c963f66afa6",
+                title: "step1",
+                description: "string",
+                kind: "optional",
                 status: "proposed",
-                children: [],
             },
         ],
     },
+];
+
+const waypoints = [
     {
-        id: "3",
-        title: "Name3",
-        author_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        description: "string",
-        root: [
-            {
-                id: "1",
-                parent_id: null,
-                title: "Entry level",
-                description: "Do some easy steps",
-                kind: "required",
-                status: "proposed",
-                children: [],
-            },
-        ],
+        title: "HTTPS",
+        kind: "LeafCompleted",
+        roadmap_id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    },
+    {
+        title: "HTML",
+        kind: "NodeCompleted",
+        roadmap_id: "2fa85f64-5717-4562-b3fc-2c963f66afa6",
     },
 ];

@@ -5,26 +5,17 @@
 
 <p class="text-start mt-2"><%= map.description %></p>
 
-<ul>
-    <% map.root.forEach(function(obj) { %>
-    <li>
-        <h2><%= obj.title %></h2>
-        <p><%= obj.description %></p>
-        <% if (obj.children.length > 0) { %> <% recursiveFunction(obj.children);
-        %> <% } %>
+<ol class="list-group list-group-numbered col-5">
+    <% for (step of map.content) { %>
+    <li
+        class="list-group-item d-flex justify-content-between align-items-start"
+    >
+        <div class="ms-2 me-auto">
+            <div class="fw-bold"><%= step.title %></div>
+            <%= step.description %>
+        </div>
+        <span class="badge text-bg-primary p-2 me-2"><%= step.kind %> </span>
+        <span class="badge text-bg-info p-2"><%= step.status %></span>
     </li>
-    <% }); %>
-</ul>
-
-<% function recursiveFunction(children) { %>
-<ul>
-    <% children.forEach(function(child) { %>
-    <li>
-        <h3><%= child.title %></h3>
-        <p><%= child.description %></p>
-        <% if (child.children.length > 0) { %> <%
-        recursiveFunction(child.children); %> <% } %>
-    </li>
-    <% }); %>
-</ul>
-<% } %>
+    <% } %>
+</ol>
