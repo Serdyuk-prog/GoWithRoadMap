@@ -1,0 +1,71 @@
+openapi: 3.0.1
+info:
+  title: History service
+  description: Service that serves history
+  version: 0.1.0
+servers:
+  - url: http://{hostname}/api/v1
+    variables:
+      hostname:
+        default: localhost
+paths:
+  /history:
+    get:
+      summary: Get user history
+      tags:
+        - History
+      parameters:
+        - name: briefly
+          in: query
+          required: true
+          schema:
+            type: boolean
+            default: false
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/History"
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    History:
+      required:
+        - waypoints
+      properties:
+        waypoints:
+          type: array
+          items:
+            $ref: "#/components/schemas/WayPoint"
+    WayPoint:
+      required:
+        - title
+        - kind
+      properties:
+        title:
+          type: string
+          example: HTTPS
+        kind:
+          $ref: "#/components/schemas/WayPointKind"
+        roadmap_id:
+          type: string
+          format: uuid
+    WayPointKind:
+      type: string
+      enum:
+        - LeafCompleted
+        - NodeCompleted
+        - RoadmapCompleted
+    Error:
+      required:
+        - message
+      properties:
+        message:
+          type: string
