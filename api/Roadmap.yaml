@@ -1,0 +1,188 @@
+openapi: 3.0.1
+info:
+  title: RoadMap service
+  description: Service for roadmaps
+  version: 0.1.0
+servers:
+  - url: http://{hostname}/api/v1
+    variables:
+      hostname:
+        default: localhost
+paths:
+  /roadmaps:
+    get:
+      operationId: SearchRoadmaps
+      summary: Search for roadmaps
+      tags:
+        - RoadMap
+      parameters:
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/RoadMap"
+    post:
+      operationId: CreateNewRoadMap
+      summary: Create a new roadmap
+      tags:
+        - RoadMap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRoadMapRequest"
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoadMap"
+  /roadmaps/{id}:
+    get:
+      operationId: GetRoadMapByID
+      summary: Get a roadmap
+      tags:
+        - RoadMap
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoadMap"
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      operationId: UpdateRoadMap
+      summary: Modify existing roadmap
+      tags:
+        - RoadMap
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModifyRoadMapRequest"
+      responses:
+        204:
+          description: Modified
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    CreateRoadMapRequest:
+      required:
+        - title
+      properties:
+        title:
+          type: string
+        description:
+          nullable: true
+          type: string
+    ModifyRoadMapRequest:
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        content:
+          nullable: true
+          allOf:
+            - type: array
+              description: Содержит упорядоченный список пунктов карты.
+              items:
+                $ref: "#/components/schemas/Item"
+    CopyRoadMapRequest:
+      properties:
+        to_user_id:
+          type: string
+          format: uuid
+    RoadMap:
+      required:
+        - id
+        - title
+        - root
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          nullable: true
+          type: string
+        content:
+          type: array
+          description: Содержит упорядоченный список пунктов карты.
+          items:
+            $ref: "#/components/schemas/Item"
+    Item:
+      required:
+        - id
+        - title
+        - description
+        - kind
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        kind:
+          $ref: "#/components/schemas/ItemKind"
+        status:
+          $ref: "#/components/schemas/ItemStatus"
+    ItemKind:
+      type: string
+      enum:
+        - optional
+        - required
+    ItemStatus:
+      type: string
+      enum:
+        - proposed
+        - completed
+        - skipped
+    Error:
+      required:
+        - message
+      properties:
+        message:
+          type: string
