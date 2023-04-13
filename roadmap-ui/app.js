@@ -2,7 +2,8 @@ const express = require("express");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
-const roadmapApi = require("./api/roadmap")
+const roadmapApi = require("./api/roadmap");
+const { transformJson } = require("./utils");
 
 const app = express();
 
@@ -58,16 +59,18 @@ app.get("/:id", (req, res) => {
 
 app.post("/map", (req, res) => {
     console.log(req.body);
+    const transformed = transformJson(req.body);
     // send new map request
-    roadmapApi.createRoadmap(req.body).then(e => {
+    roadmapApi.createRoadmap(transformed).then(e => {
       res.redirect("/");
     })
 });
 
 app.post("/map/:id", (req, res) => {
     console.log(req.body);
+    const transformed = transformJson(req.body);
     // modify map
-    roadmapApi.updateRoadmap(req.params.id, req.body).then(e => {
+    roadmapApi.updateRoadmap(req.params.id, transformed).then(e => {
       res.redirect("/" + req.params.id);
     })
 });
