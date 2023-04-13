@@ -1,0 +1,16 @@
+server:
+    port: 8080
+springdoc:
+    packages-to-scan: "com.example.history"
+    paths-to-match: "/**"
+spring:
+    datasource:
+        url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/history}
+        username: ${POSTGRES_USER:postgres}
+        password: ${POSTGRES_PASSWORD:postgres}
+        driver-class-name: org.postgresql.Driver
+jpa:
+    hibernate:
+        ddl-auto: create
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    show-sql: true

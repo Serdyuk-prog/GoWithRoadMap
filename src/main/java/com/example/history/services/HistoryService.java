@@ -13,22 +13,34 @@ import java.util.UUID;
 // History service class
 @Service
 public class HistoryService {
+
+    private final WayPointRepository wayPointRepository;
+
     @Autowired
-    private WayPointRepository wayPointRepository;
+    public HistoryService(WayPointRepository wayPointRepository) {
+        this.wayPointRepository = wayPointRepository;
+    }
 
     // Get user history method
     public History getUserHistory(boolean briefly) {
 
         // For example, return a dummy history object
-        History history = new History(List.of(
-                new WayPoint(UUID.randomUUID(), "HTTPS", WayPointKind.LeafCompleted, UUID.randomUUID()),
-                new WayPoint(UUID.randomUUID(), "Web Development", WayPointKind.NodeCompleted, UUID.randomUUID()),
-                new WayPoint(UUID.randomUUID(), "Full Stack Developer", WayPointKind.RoadmapCompleted, UUID.randomUUID()),
-                new WayPoint(UUID.randomUUID(), "ABAB", WayPointKind.LeafCompleted, UUID.randomUUID())
-        ));
 
-        //TODO: Test with database running.
-//        History history = new History(wayPointRepository.findAll());
+        WayPoint wp1 = new WayPoint();
+        wp1.setId(UUID.randomUUID());
+        wp1.setTitle("HTTPS");
+        wp1.setKind(WayPointKind.LeafCompleted);
+        wp1.setRoadmapId(UUID.randomUUID());
+
+        WayPoint wp2 = new WayPoint();
+        wp2.setId(UUID.randomUUID());
+        wp2.setTitle("Full Stack Developer");
+        wp2.setKind(WayPointKind.NodeCompleted);
+        wp2.setRoadmapId(UUID.randomUUID());
+
+        History history = new History(List.of(wp1, wp2));
+
+        // History history = new History(wayPointRepository.findAll());
 
         // If briefly is true, only return the last waypoint
         if (briefly) {

@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-//@RequestMapping("/history")
 @RequestMapping("/api")
 public class HistoryController {
 
     // History service instance
     private final HistoryService historyService;
+
     @Autowired
     private RabbitMQSender rabbitMQSender;
 
@@ -28,10 +28,12 @@ public class HistoryController {
 
     // Get user history endpoint
     @GetMapping("/history/byUser")
-    public ResponseEntity getUserHistory(@RequestParam(name = "briefly") boolean briefly) {
+    public ResponseEntity getUserHistory(@RequestParam(name = "briefly", required = false, defaultValue = "true") String briefly) {
+
+        Boolean brif = briefly.equals("true");
         try {
             // Call the history service method
-            History history = historyService.getUserHistory(briefly);
+            History history = historyService.getUserHistory(brif);
 
 //            history.getWaypoints().forEach(w -> {
 //                rabbitMQSender.sendWayPoint(w);
