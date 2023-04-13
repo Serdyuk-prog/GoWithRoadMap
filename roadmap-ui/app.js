@@ -2,6 +2,8 @@ const express = require("express");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
+const roadmapApi = require("./api/roadmap");
+const { transformJson } = require("./utils");
 
 const app = express();
 
@@ -12,8 +14,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
 app.get("/", (req, res) => {
-    // get all maps
-    res.render("main", { maps });
+    //get all maps
+    //res.render("main", { maps });
+    roadmapApi.searchRoadmaps().then(data =>
+      res.render("main", { maps: data.result })
+    );
 });
 
 app.get("/new", (req, res) => {
@@ -26,36 +31,48 @@ app.get("/history", (req, res) => {
 
 app.get("/edit/:id", (req, res) => {
     // get map by id
-    let map = {};
-    for (let el of maps) {
-        if (el.id == req.params.id) {
-            map = el;
-        }
-    }
-    res.render("editMap", { map });
+    // let map = {};
+    // for (let el of maps) {
+    //     if (el.id == req.params.id) {
+    //         map = el;
+    //     }
+    // }
+    // res.render("editMap", { map });
+    roadmapApi.getRoadmapById(req.params.id).then(e => {
+      res.render("editMap", { map: e });
+    })
 });
 
 app.get("/:id", (req, res) => {
     // get map by id
-    let map = {};
-    for (let el of maps) {
-        if (el.id == req.params.id) {
-            map = el;
-        }
-    }
-    res.render("map", { map });
+    // let map = {};
+    // for (let el of maps) {
+    //     if (el.id == req.params.id) {
+    //         map = el;
+    //     }
+    // }
+    // res.render("map", { map });
+    roadmapApi.getRoadmapById(req.params.id).then(e => {
+      res.render("map", { map: e });
+    })
 });
 
 app.post("/map", (req, res) => {
     console.log(req.body);
+    const transformed = transformJson(req.body);
     // send new map request
-    res.redirect("/");
+    roadmapApi.createRoadmap(transformed).then(e => {
+      res.redirect("/");
+    })
 });
 
 app.post("/map/:id", (req, res) => {
     console.log(req.body);
+    const transformed = transformJson(req.body);
     // modify map
-    res.redirect("/" + req.params.id);
+    roadmapApi.updateRoadmap(req.params.id, transformed).then(e => {
+      res.redirect("/" + req.params.id);
+    })
 });
 
 app.listen(3000, () => {
