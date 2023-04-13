@@ -25,7 +25,7 @@ public class MessageSender : IMessageSender
             MessageType.Notification => (config.NotificationQueueName, config.NotificationExchangeName, config.NotificationWaypointRoutingKey),
             _ => throw new ArgumentOutOfRangeException(nameof(message), message, null)
         };
-        
+
         channel.QueueDeclare(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
 
         string serializedMessage = JsonSerializer.Serialize(message);

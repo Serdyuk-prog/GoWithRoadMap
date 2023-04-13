@@ -46,8 +46,8 @@ public class UpdateRoadmapEndpoint : Endpoint<UpdateRoadmapRequest>
 
     private static void UpdateRoadmap(Roadmap roadmap, string title, string description, IEnumerable<UpdateRoadmapRequestContent> contents)
     {
-        
-        
+
+
         roadmap.Title = title;
         roadmap.Description = description;
         roadmap.Content = contents.Select(x => new Node
@@ -60,7 +60,7 @@ public class UpdateRoadmapEndpoint : Endpoint<UpdateRoadmapRequest>
         });
     }
 
-    private void SendHistoryMessages(Roadmap roadmap, 
+    private void SendHistoryMessages(Roadmap roadmap,
         IEnumerable<UpdateRoadmapRequestContent> contents)
     {
         foreach (UpdateRoadmapRequestContent content in contents)

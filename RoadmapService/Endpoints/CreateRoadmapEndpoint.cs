@@ -11,7 +11,7 @@ public class CreateRoadmapEndpoint : Endpoint<CreateRoadmapRequest, Roadmap>
         this.roadmapRepository = roadmapRepository;
         this.messageSender = messageSender;
     }
-    
+
     public override void Configure()
     {
         Post("/roadmaps");
@@ -27,8 +27,8 @@ public class CreateRoadmapEndpoint : Endpoint<CreateRoadmapRequest, Roadmap>
             Title = title,
             Description = description
         };
-        
+
         roadmapRepository.Add(roadmap);
-        await roadmapRepository.SaveChangesAsync(ct); 
+        await roadmapRepository.SaveChangesAsync(ct);
     }
 }
