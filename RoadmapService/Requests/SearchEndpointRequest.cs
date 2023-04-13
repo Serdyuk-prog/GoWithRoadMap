@@ -1,7 +1,7 @@
 ﻿namespace RoadmapService.Requests;
 
-public class SearchEndpointRequest
+public record SearchEndpointRequest(string Search)
 {
-    [FromQueryParams] 
-    public string Search { get; set; } = string.Empty;
+    [FromQueryParams]
+    public string Search { get; init; } = string.Empty;
 }

@@ -1,10 +1,10 @@
 ﻿namespace RoadmapService.Requests;
 
-public class CreateRoadmapRequest
+public record CreateRoadmapRequest(string Title, string Description)
 {
     [FromBody]
-    public string Title { get; set; } = string.Empty;
+    public string Title { get; init; } = string.Empty;
 
-    [FromBody] 
-    public string Description { get; set; } = string.Empty;
+    [FromBody]
+    public string Description { get; init; } = string.Empty;
 }

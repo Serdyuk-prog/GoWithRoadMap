@@ -9,14 +9,11 @@ public class RoadmapContext : DbContext
         modelBuilder.Entity<Roadmap>()
             .HasKey(x => x.Id);
         modelBuilder.Entity<Roadmap>()
-            .HasOne(x => x.Root).WithOne();
+            .HasMany(x => x.Content)
+            .WithOne();
 
         modelBuilder.Entity<Node>()
             .HasKey(x => x.Id);
-        modelBuilder.Entity<Node>()
-            .HasMany(x => x.Children)
-            .WithOne()
-            .HasForeignKey(x => x.ParentId);
     }
 
     public DbSet<Roadmap> Roadmaps => Set<Roadmap>();
