@@ -1,0 +1,21 @@
+<% layout('./boilerplate') %>
+
+<h1><%= map.title %></h1>
+<a href="/edit/<%= map.id %>" class="btn btn-danger">Edit</a>
+
+<p class="text-start mt-2"><%= map.description %></p>
+
+<ol class="list-group list-group-numbered col-5">
+    <% for (step of map.content) { %>
+    <li
+        class="list-group-item d-flex justify-content-between align-items-start"
+    >
+        <div class="ms-2 me-auto">
+            <div class="fw-bold"><%= step.title %></div>
+            <%= step.description %>
+        </div>
+        <span class="badge text-bg-primary p-2 me-2"><%= step.kind %> </span>
+        <span class="badge text-bg-info p-2"><%= step.status %></span>
+    </li>
+    <% } %>
+</ol>

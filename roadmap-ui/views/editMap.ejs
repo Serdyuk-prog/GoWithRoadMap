@@ -1,0 +1,91 @@
+<% layout('./boilerplate') %>
+
+<h1>Edit Map</h1>
+
+<% object=map %>
+
+<form class="col-4" method="POST" action="/map/<%= map.id %>">
+    <div class="mb-3">
+        <label for="title" class="form-label">
+            <h2>Title of your map</h2>
+        </label>
+        <input type="text" name="map[title]" value="<%= map.title %>" class="form-control mb-2" />
+        <label for="description" class="form-label">
+            <h2>Description</h2>
+        </label>
+        <textarea name="map[description]" class="form-control"><%= map.description %> </textarea>
+    </div>
+    <div id="steps" class="mb-3">
+        <% let count = 0; %>
+        <% for (step of map.content) { %>
+        <div>
+            <hr>
+            <label class="form-label">
+                Title of the step
+            </label>
+            <input type="text" name="titles[<%= count %>]" value="<%= step.title %>" class="form-control mb-2" required/>
+
+            <label class="form-label">
+                Description
+            </label>
+            <textarea name="desc[<%= count %>]" class="form-control mb-2" required><%= step.description %> </textarea>
+
+            <label class="form-label">
+                Kind
+            </label>
+            <select class="form-select" name="kind[<%= count %>]" value="<%= step.kind %>" required>
+                <option value="optional">optional</option>
+                <option value="required">required</option>
+            </select>
+
+            <label class="form-label">
+                Status
+            </label>
+            <select class="form-select" name="status[<%= count %>]" value="<%= step.status %>" required>
+                <option value="proposed">proposed</option>
+                <option value="completed">completed</option>
+                <option value="skipped">skipped</option>
+            </select>
+        </div>
+        <% count++; %>
+        <% } %>
+    </div>
+    <button type="button" onclick="addStep()" class="btn btn-primary d-block mb-2">+</button>
+    <button type="submit" class="btn btn-danger">Edit</button>
+</form>
+
+<script>
+    function addStep() {
+        const div = document.querySelector("#steps");
+        console.log(div.childElementCount);
+        div.innerHTML += `
+        <div>
+            <hr>
+            <label for="title" class="form-label" >
+                <h4>Title of the step</h4>
+            </label>
+            <input type="text" name="titles[${div.childElementCount}].title"  class="form-control mb-2" required/>
+            <label for="description" class="form-label">
+                <h4>Description</h4>
+            </label>
+            <textarea name="desc[${div.childElementCount}].description" class="form-control mb-2" required></textarea>
+            <label class="form-label">
+                Kind
+            </label>
+            <select class="form-select" name="kind[${div.childElementCount}]" required>
+                <option value="optional">optional</option>
+                <option value="required">required</option>
+            </select>
+
+            <label class="form-label">
+                Status
+            </label>
+            <select class="form-select" name="status[${div.childElementCount}]" required>
+                <option value="proposed">proposed</option>
+                <option value="completed">completed</option>
+                <option value="skipped">skipped</option>
+            </select>
+        </div>
+       `;
+    }
+</script>
