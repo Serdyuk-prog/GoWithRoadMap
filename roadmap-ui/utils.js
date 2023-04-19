@@ -1,14 +1,15 @@
-
-export function transformJson(json) {
-  const { map, titles, desc, kind, status } = json;
-
-  const content = titles.map((title, index) => ({
-    id: index, // в джсоне нужен id
-    title,
-    description: desc[index],
-    kind: kind[index] || 'optional', 
-    status: status[index] || 'proposed', 
-  }));
+function transformJson(json) {
+  const { map, titles, desc, kind, status, id } = json;
+  let content = []
+  if (titles?.length) {
+    content = titles.map((title, index) => ({
+      id: id[index], // в джсоне нужен id
+      title,
+      description: desc[index],
+      kind: kind[index] || 'optional', 
+      status: status[index] || 'proposed', 
+    }));
+  }
 
   return {
     title: map.title,
@@ -16,3 +17,5 @@ export function transformJson(json) {
     content,
   };
 }
+
+module.exports = { transformJson }

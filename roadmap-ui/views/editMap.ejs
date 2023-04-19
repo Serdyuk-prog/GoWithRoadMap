@@ -46,6 +46,8 @@
                 <option value="completed">completed</option>
                 <option value="skipped">skipped</option>
             </select>
+
+            <input type="text" name="id[<%= count %>]" value="<%= step.id %>" class="form-control mb-2" style="display: none;" required/>
         </div>
         <% count++; %>
         <% } %>
@@ -85,6 +87,9 @@
                 <option value="completed">completed</option>
                 <option value="skipped">skipped</option>
             </select>
+
+            <input type="text" name="id[${div.childElementCount}]" value="${uuidv4()}" class="form-control mb-2" style="display: none;" required/>
+
         </div>
        `;
     }
