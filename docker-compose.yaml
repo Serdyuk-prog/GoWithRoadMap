@@ -25,3 +25,20 @@ services:
       timeout: 5s
       retries: 5
     restart: always
+    
+  roadmap-service:
+    container_name: roadmap-service
+    build: ./RoadmapService
+    ports:
+      - "8080:80"
+    environment:
+      ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=Roadmap;User ID=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      RabbitMq__Host: "rabbitmq"
+      RabbitMq__UserName: "guest"
+      RabbitMq__Password: "guest"
+      RabbitMq__HistoryQueueName: "history_queue"
+      RabbitMq__HistoryExchangeName: "history_exchange"
+      RabbitMq__HistoryWaypointRoutingKey: "new_waypoint_routing_key"
+      RabbitMq__NotificationQueueName: "notification_queue"
+      RabbitMq__NotificationExchangeName: "new_notification_exchange"
+      RabbitMq__NotificationWaypointRoutingKey: ""
