@@ -15,6 +15,8 @@ public class UpdateRoadmapEndpoint : Endpoint<UpdateRoadmapRequest>
     {
         Patch("/roadmaps/{id}");
         AllowAnonymous();
+        Description(x => x
+            .Accepts<UpdateRoadmapRequest>("application/json"));
     }
 
     public override async Task HandleAsync(UpdateRoadmapRequest req, CancellationToken ct)

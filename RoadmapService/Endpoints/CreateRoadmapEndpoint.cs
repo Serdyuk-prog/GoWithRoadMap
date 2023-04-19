@@ -3,19 +3,19 @@
 public class CreateRoadmapEndpoint : Endpoint<CreateRoadmapRequest, Roadmap>
 {
     private readonly IRoadmapRepository roadmapRepository;
-    private readonly IMessageSender messageSender;
 
-
-    public CreateRoadmapEndpoint(IRoadmapRepository roadmapRepository, IMessageSender messageSender)
+    public CreateRoadmapEndpoint(IRoadmapRepository roadmapRepository)
     {
         this.roadmapRepository = roadmapRepository;
-        this.messageSender = messageSender;
     }
 
     public override void Configure()
     {
         Post("/roadmaps");
         AllowAnonymous();
+        Description(x => x
+            .Accepts<CreateRoadmapRequest>("application/json")
+            .Produces<Roadmap>(201, "application/json"));
     }
 
     public override async Task HandleAsync(CreateRoadmapRequest req, CancellationToken ct)
@@ -30,5 +30,6 @@ public class CreateRoadmapEndpoint : Endpoint<CreateRoadmapRequest, Roadmap>
 
         roadmapRepository.Add(roadmap);
         await roadmapRepository.SaveChangesAsync(ct);
+        HttpContext.Response.StatusCode = 201;
     }
 }
