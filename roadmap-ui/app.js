@@ -3,6 +3,7 @@ const path = require("path");
 const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const roadmapApi = require("./api/roadmap");
+const historyApi = require("./api/history");
 const { transformJson } = require("./utils");
 
 const app = express();
@@ -28,7 +29,12 @@ app.get("/new", (req, res) => {
 });
 
 app.get("/history", (req, res) => {
-    res.render("history", { waypoints });
+    historyApi.getHistory(false).then(data => {
+      res.render("history", { waypoints: data });
+    }).catch(e => {
+      console.log(e);
+      res.render("history", { waypoints });
+    })
 });
 
 app.get("/edit/:id", (req, res) => {
@@ -85,7 +91,7 @@ app.post("/map/:id", (req, res) => {
       res.redirect("/" + req.params.id);
     }).catch(e => {
       console.log(e);
-      res.redirect("/");
+      res.redirect("/" + req.params.id);
     })
 });
 
