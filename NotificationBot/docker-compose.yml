@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  notification_bot:
+    build: .
+    image: notification_bot
+    environment:
+      BOT_TOKEN: your_bot_token
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
