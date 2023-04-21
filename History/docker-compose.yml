@@ -1,34 +1,12 @@
-## docker-compose.yml
-#version: "3.9"
-#services:
-#  history-service:
-#    build: .
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - db
-#  db:
-#    image: postgres
-#    environment:
-#      POSTGRES_PASSWORD: example
-
-
 # docker-compose.yml
 version: "3.8"
 services:
-#  history-service:
-#    build: .
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      - db
-#      - rabbitmq
   postgres:
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: history
+      POSTGRES_DB: postgres
       POSTGRES_INITDB_ARGS: --locale=en_US.UTF-8 --encoding=UTF8 --lc-collate=utf8mb4_general_ci --lc-ctype=utf8mb4_general_ci
     ports:
       - "5432:5432"
