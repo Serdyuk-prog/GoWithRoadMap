@@ -2,34 +2,33 @@ package com.example.history.model;
 
 import jakarta.persistence.*;
 
-import java.util.UUID;
-
 // WayPoint model
 @Entity
 @Table(name = "waypoint")
 public class WayPoint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", columnDefinition = "uuid")
-    private UUID id;
+    @Column(name = "id")
+    private long id;
 
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "kind", nullable = false)
     private WayPointKind kind;
 
     @Column(name = "roadmap_id")
-    private UUID roadmapId;
+    private long roadmapId;
 
     public WayPoint() {
     }
 
-    public UUID getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -49,11 +48,11 @@ public class WayPoint {
         this.kind = kind;
     }
 
-    public UUID getRoadmapId() {
+    public long getRoadmapId() {
         return roadmapId;
     }
 
-    public void setRoadmapId(UUID roadmapId) {
+    public void setRoadmapId(long roadmapId) {
         this.roadmapId = roadmapId;
     }
 }
