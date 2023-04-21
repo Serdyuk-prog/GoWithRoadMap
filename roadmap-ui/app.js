@@ -3,6 +3,7 @@ const path = require("path");
 const ejsMate = require("ejs-mate");
 const methodOverride = require("method-override");
 const roadmapApi = require("./api/roadmap");
+const historyApi = require("./api/history");
 const { transformJson } = require("./utils");
 
 const app = express();
@@ -15,10 +16,12 @@ app.use(methodOverride("_method"));
 
 app.get("/", (req, res) => {
     //get all maps
-    //res.render("main", { maps });
     roadmapApi.searchRoadmaps().then(data =>
       res.render("main", { maps: data.result })
-    );
+    ).catch(e => {
+      console.log(e);
+      res.render("main", { maps });
+    });
 });
 
 app.get("/new", (req, res) => {
@@ -26,42 +29,55 @@ app.get("/new", (req, res) => {
 });
 
 app.get("/history", (req, res) => {
-    res.render("history", { waypoints });
+    historyApi.getHistory(false).then(data => {
+      res.render("history", { waypoints: data });
+    }).catch(e => {
+      console.log(e);
+      res.render("history", { waypoints });
+    })
 });
 
 app.get("/edit/:id", (req, res) => {
-    // get map by id
-    // let map = {};
-    // for (let el of maps) {
-    //     if (el.id == req.params.id) {
-    //         map = el;
-    //     }
-    // }
-    // res.render("editMap", { map });
+    //get map by id
     roadmapApi.getRoadmapById(req.params.id).then(e => {
       res.render("editMap", { map: e });
+    }).catch(e => {
+      console.log(e);
+      let map = {};
+      for (let el of maps) {
+          if (el.id == req.params.id) {
+              map = el;
+          }
+      }
+      res.render("editMap", { map });
     })
 });
 
 app.get("/:id", (req, res) => {
     // get map by id
-    // let map = {};
-    // for (let el of maps) {
-    //     if (el.id == req.params.id) {
-    //         map = el;
-    //     }
-    // }
-    // res.render("map", { map });
-    roadmapApi.getRoadmapById(req.params.id).then(e => {
-      res.render("map", { map: e });
-    })
+      roadmapApi.getRoadmapById(req.params.id).then(e => {
+        res.render("map", { map: e });
+      }).catch(e => {
+        console.log(e);
+        let map = {};
+        for (let el of maps) {
+            if (el.id == req.params.id) {
+                map = el;
+            }
+        }
+        res.render("map", { map });
+      })
 });
 
 app.post("/map", (req, res) => {
     console.log(req.body);
     const transformed = transformJson(req.body);
+    console.log(transformed);
     // send new map request
     roadmapApi.createRoadmap(transformed).then(e => {
+      res.redirect("/");
+    }).catch(e => {
+      console.log(e);
       res.redirect("/");
     })
 });
@@ -69,8 +85,12 @@ app.post("/map", (req, res) => {
 app.post("/map/:id", (req, res) => {
     console.log(req.body);
     const transformed = transformJson(req.body);
+    console.log(transformed);
     // modify map
     roadmapApi.updateRoadmap(req.params.id, transformed).then(e => {
+      res.redirect("/" + req.params.id);
+    }).catch(e => {
+      console.log(e);
       res.redirect("/" + req.params.id);
     })
 });
