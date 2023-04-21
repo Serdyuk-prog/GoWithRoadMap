@@ -13,6 +13,9 @@ public class SearchRoadmapEndpoint : Endpoint<SearchEndpointRequest, ResultListD
     {
         Get("/roadmaps");
         AllowAnonymous();
+        Description(x => x
+            .Produces<ResultListDto<Roadmap>>(200, "application/json")
+            .Accepts<SearchEndpointRequest>("application/json"));
     }
 
     public override async Task HandleAsync(SearchEndpointRequest req, CancellationToken ct)
@@ -25,7 +28,7 @@ public class SearchRoadmapEndpoint : Endpoint<SearchEndpointRequest, ResultListD
             await SendAsync(new ResultListDto<Roadmap>(allRoadmaps), 200, ct);
             return;
         }
-        
+
         List<Roadmap> roadmaps = await roadmapRepository.SearchByName(query)
             .ToListAsync(cancellationToken: ct);
         await SendAsync(new ResultListDto<Roadmap>(roadmaps), 200, ct);

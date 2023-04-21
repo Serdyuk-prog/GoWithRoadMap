@@ -13,6 +13,9 @@ public class GetRoadmapByIdEndpoint : EndpointWithoutRequest<Roadmap>
     {
         Get("/roadmaps/{Id}");
         AllowAnonymous();
+        Description(x => x.WithName("GetRoadmapById")
+            .Produces<Roadmap>(200, "application/json")
+            .Produces(404));
     }
 
     public override async Task HandleAsync(CancellationToken ct)
